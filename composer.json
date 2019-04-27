@@ -1,0 +1,15 @@
+{
+  "require": {
+    "parsecsv/php-parsecsv": "^1.1",
+    "monolog/monolog": "^1.24",
+    "symfony/yaml": "^4.2",
+    "symfony/console": "^4.2",
+    "phpunit/phpunit": "^7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hj\\": "src/Hj/",
+      "Hj\\Tests\\": "tests/Hj/"
+    }
+  }
+}
