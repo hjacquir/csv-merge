@@ -1,0 +1,10 @@
+filePath:
+    receiver: 'testFilePath/receiver.csv'
+    host: 'testFilePath/host.csv'
+    merged: 'testFilePath/merged.csv'
+keyHeader:
+    keyHeaderReceiver: keyHeaderHost
+    keyHeaderReceiver2: keyHeaderHost2
+migrationMapping:
+    valueHost1: valueReceiver1
+    valueHost2: valueReceiver2
