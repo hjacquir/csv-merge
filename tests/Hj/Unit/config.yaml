@@ -3,8 +3,8 @@ filePath:
     host: 'testFilePath/host.csv'
     merged: 'testFilePath/merged.csv'
 keyHeader:
-    keyHeaderReceiver: keyHeaderHost
-    keyHeaderReceiver2: keyHeaderHost2
+    - {receiver: keyHeaderReceiver, host: keyHeaderHost}
+    - {receiver: keyHeaderReceiver2, host: keyHeaderHost2}
 migrationMapping:
-    valueHost1: valueReceiver1
-    valueHost2: valueReceiver2
+    headerHost1: headerReceiver1
+    headerHost2: headerReceiver2

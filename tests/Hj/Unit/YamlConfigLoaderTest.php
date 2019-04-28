@@ -35,8 +35,14 @@ class YamlConfigLoaderTest extends TestCase
     public function testGetKeyHeader()
     {
         $this->assertSame([
-            'keyHeaderReceiver' => 'keyHeaderHost',
-            'keyHeaderReceiver2' => 'keyHeaderHost2',
+            0 => [
+                'receiver' => 'keyHeaderReceiver',
+                'host' => 'keyHeaderHost',
+            ],
+            1 => [
+                'receiver' => 'keyHeaderReceiver2',
+                'host' => 'keyHeaderHost2',
+            ],
         ],
             $this->loader->getKeyHeader());
     }
@@ -44,8 +50,8 @@ class YamlConfigLoaderTest extends TestCase
     public function testGetMappingMigration()
     {
         $this->assertSame([
-            'valueHost1' => 'valueReceiver1',
-            'valueHost2' => 'valueReceiver2',
+            'headerHost1' => 'headerReceiver1',
+            'headerHost2' => 'headerReceiver2',
         ],
             $this->loader->getMappingMigration());
     }

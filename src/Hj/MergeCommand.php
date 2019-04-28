@@ -52,5 +52,19 @@ class MergeCommand extends Command
         $receiverFile = new ReceiverFile($configLoader->getReceiverFilePath(), new Csv());
         $hostFile = new HostFile($configLoader->getHostFilePath(), new Csv());
         $mergedFile = new MergedFile($configLoader->getMergedFilePath(), new Csv());
+        $keyHeaders = $configLoader->getKeyHeader();
+        $extractor = new Extractor('', '');
+        foreach ($keyHeaders as $key => $keyHeader) {
+            if ($key == 0) {
+                $extractor = new Extractor($keyHeader['receiver'], $keyHeader['host']);
+            } else {
+                // add successor if exists
+                $successor = new Extractor($keyHeader['receiver'], $keyHeader['host']);
+                $extractor->setSuccessor($successor);
+            }
+        }
+        $migrationMapping = $configLoader->getMappingMigration();
+        $processor = new Processor();
+        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $migrationMapping);
     }
 }
