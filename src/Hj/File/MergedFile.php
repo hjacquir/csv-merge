@@ -15,7 +15,6 @@ class MergedFile extends File
     public function __construct($fileName, Csv $csvParser)
     {
         parent::__construct($fileName, $csvParser);
-        $this->getCsvParser()->auto($fileName);
         $this->getCsvParser()->enclosure = '';
     }
 

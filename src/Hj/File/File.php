@@ -27,6 +27,7 @@ abstract class File
         $this->fileName = $fileName;
         $this->fileExist($this->fileName);
         $this->csvParser = $csvParser;
+        $this->getCsvParser()->auto($fileName);
     }
 
     /**
