@@ -1,6 +1,6 @@
 <?php
 
-namespace Hj\Unit;
+namespace Hj\Tests\Unit;
 
 use Hj\Extractor;
 use PHPUnit\Framework\TestCase;

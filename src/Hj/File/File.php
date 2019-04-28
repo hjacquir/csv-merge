@@ -2,6 +2,7 @@
 
 namespace Hj\File;
 
+use Hj\Exception\FileNotFoundException;
 use ParseCsv\Csv;
 
 abstract class File
@@ -24,7 +25,19 @@ abstract class File
     public function __construct($fileName, Csv $csvParser)
     {
         $this->fileName = $fileName;
+        $this->fileExist($this->fileName);
         $this->csvParser = $csvParser;
+    }
+
+    /**
+     * @param string $fileName
+     * @throws FileNotFoundException
+     */
+    private function fileExist($fileName)
+    {
+        if (!file_exists($fileName)) {
+            throw new FileNotFoundException("The file {$fileName} does not exist");
+        }
     }
 
     /**
