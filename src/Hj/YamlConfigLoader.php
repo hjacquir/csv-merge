@@ -2,7 +2,6 @@
 
 namespace Hj;
 
-use Hj\Exception\FileNotFoundException;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlConfigLoader
