@@ -21,16 +21,6 @@ class Extractor
     private $successor = null;
 
     /**
-     * @var array
-     */
-    private $rowWhereToSaveData;
-
-    /**
-     * @var array
-     */
-    private $rowWhereToGetData;
-
-    /**
      * @param string $headerComparisonWhereToSaveData Comparison column header of the file hosting the data
      * @param string $headerComparisonWhereToGetData Comparison column header of the file where the data will be retrieved
      */

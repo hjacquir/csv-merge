@@ -29,7 +29,7 @@ class MergedFile extends File
     {
         $receiverRows = $receiverFile->getRows();
 
-        foreach ($receiverRows as &$receiverRow) {
+        foreach ($receiverRows as $rowNumber => &$receiverRow) {
             foreach ($hostFile->getRows() as $hostRow) {
                 foreach ($headers as $headerHost => $headerReceiver) {
                     $processor->process($receiverRow, $hostRow, $headerReceiver, $headerHost, $extractor);
