@@ -2,6 +2,8 @@
 
 namespace Hj;
 
+use Hj\Exception\UndefinedColumnException;
+
 class Extractor
 {
 
@@ -31,15 +33,21 @@ class Extractor
     }
 
     /**
-     * @param array $rowWhereToSaveData
-     * @param array $rowWhereToGetData
-     * @param string $headerWhereToSaveData
-     * @param string $headerWhereToGetData
-     *
+     * @param $rowWhereToSaveData
+     * @param $rowWhereToGetData
+     * @param $headerWhereToSaveData
+     * @param $headerWhereToGetData
      * @return bool
+     *
+     * @throws UndefinedColumnException
      */
     public function extractData(&$rowWhereToSaveData, $rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData)
     {
+       $this->ckeckHeader($this->headerComparisonWhereToSaveData, $rowWhereToSaveData);
+       $this->ckeckHeader($this->headerComparisonWhereToGetData, $rowWhereToGetData);
+        $this->ckeckHeader($headerWhereToSaveData, $rowWhereToSaveData);
+        $this->ckeckHeader($headerWhereToGetData, $rowWhereToGetData);
+
         if (trim($rowWhereToSaveData[$this->headerComparisonWhereToSaveData]) == trim($rowWhereToGetData[$this->headerComparisonWhereToGetData])) {
             $this->sanitizeValue($rowWhereToSaveData, $rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData);
             $rowWhereToSaveData[$headerWhereToSaveData] = $rowWhereToGetData[$headerWhereToGetData];
@@ -48,6 +56,18 @@ class Extractor
         }
 
         return false;
+    }
+
+    /**
+     * @param $headerName
+     * @param $row
+     *
+     * @throws UndefinedColumnException
+     */
+    private function ckeckHeader($headerName, $row) {
+        if (!isset($row[$headerName])) {
+            throw new UndefinedColumnException("The header : {$headerName} does not exist. Please check your csv file or your config yaml file.");
+        }
     }
 
     /**
