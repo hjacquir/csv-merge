@@ -43,7 +43,9 @@ class MergeCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int|void|null
+     * @throws Exception\FileNotFoundException
+     * @throws Exception\UndefinedColumnException
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

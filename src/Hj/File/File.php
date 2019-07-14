@@ -19,10 +19,12 @@ abstract class File
     public $csvParser;
 
     /**
-     * @param $fileName
+     * File constructor.
+     * @param string $fileName
      * @param Csv $csvParser
+     * @throws FileNotFoundException
      */
-    public function __construct($fileName, Csv $csvParser)
+    public function __construct(string $fileName, Csv $csvParser)
     {
         $this->fileName = $fileName;
         $this->fileExist($this->fileName);
@@ -34,7 +36,7 @@ abstract class File
      * @param string $fileName
      * @throws FileNotFoundException
      */
-    private function fileExist($fileName)
+    private function fileExist(string $fileName)
     {
         if (!file_exists($fileName)) {
             throw new FileNotFoundException("The file {$fileName} does not exist");
@@ -44,7 +46,7 @@ abstract class File
     /**
      * @return array
      */
-    public function getRows()
+    public function getRows() : array
     {
         return $this->getCsvParser()->data;
     }
@@ -52,7 +54,7 @@ abstract class File
     /**
      * @return string
      */
-    public function getFileName()
+    public function getFileName() : string
     {
         return $this->fileName;
     }
@@ -60,7 +62,7 @@ abstract class File
     /**
      * @return Csv
      */
-    public function getCsvParser()
+    public function getCsvParser() : Csv
     {
         return $this->csvParser;
     }

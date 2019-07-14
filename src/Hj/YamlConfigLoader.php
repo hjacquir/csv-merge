@@ -40,7 +40,7 @@ class YamlConfigLoader
     /**
      * @param string $yamlFile
      */
-    public function __construct($yamlFile)
+    public function __construct(string $yamlFile)
     {
         $this->yamlFile = $yamlFile;
         $this->parsedValues = Yaml::parseFile($this->yamlFile);
@@ -49,7 +49,7 @@ class YamlConfigLoader
     /**
      * @return string
      */
-    public function getReceiverFilePath()
+    public function getReceiverFilePath() : string
     {
         $this->receiverFilePath = $this->parsedValues['filePath']['receiver'];
         return $this->receiverFilePath;
@@ -58,7 +58,7 @@ class YamlConfigLoader
     /**
      * @return string
      */
-    public function getHostFilePath()
+    public function getHostFilePath() : string
     {
         $this->hostFilePath = $this->parsedValues['filePath']['host'];
         return $this->hostFilePath;
@@ -67,7 +67,7 @@ class YamlConfigLoader
     /**
      * @return string
      */
-    public function getMergedFilePath()
+    public function getMergedFilePath() : string
     {
         $this->mergedFilePath = $this->parsedValues['filePath']['merged'];
         return $this->mergedFilePath;
@@ -76,7 +76,7 @@ class YamlConfigLoader
     /**
      * @return array
      */
-    public function getKeyHeader()
+    public function getKeyHeader() : array
     {
         $this->keyHeader = $this->parsedValues['keyHeader'];
         return $this->keyHeader;
@@ -85,7 +85,7 @@ class YamlConfigLoader
     /**
      * @return array
      */
-    public function getMappingMigration()
+    public function getMappingMigration() : array
     {
         $this->mappingMigration = $this->parsedValues['migrationMapping'];
         return $this->mappingMigration;
@@ -94,7 +94,7 @@ class YamlConfigLoader
     /**
      * @return string
      */
-    public function getYamlFile()
+    public function getYamlFile() : string
     {
         return $this->yamlFile;
     }
@@ -102,7 +102,7 @@ class YamlConfigLoader
     /**
      * @return array
      */
-    public function getParsedValues()
+    public function getParsedValues() : array
     {
         return $this->parsedValues;
     }

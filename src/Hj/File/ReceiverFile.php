@@ -2,15 +2,18 @@
 
 namespace Hj\File;
 
+use Hj\Exception\FileNotFoundException;
 use ParseCsv\Csv;
 
 class ReceiverFile extends File
 {
     /**
-     * @param $fileName
+     * ReceiverFile constructor.
+     * @param string $fileName
      * @param Csv $csvParser
+     * @throws FileNotFoundException
      */
-    public function __construct($fileName, Csv $csvParser)
+    public function __construct(string $fileName, Csv $csvParser)
     {
         parent::__construct($fileName, $csvParser);
         $this->getCsvParser()->heading = false;
@@ -19,7 +22,7 @@ class ReceiverFile extends File
     /**
      * @return string
      */
-    public function getHeader()
+    public function getHeader() : string
     {
         $headerArray = array_keys($this->getCsvParser()->data[0]);
         $headerString = implode(';', $headerArray);

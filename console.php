@@ -1,5 +1,9 @@
 #!/usr/bin/env php
 <?php
+/**
+ * PHP 7 déclaration stricte
+ */
+declare(strict_types=1);
 
 require __DIR__ . '/vendor/autoload.php';
 

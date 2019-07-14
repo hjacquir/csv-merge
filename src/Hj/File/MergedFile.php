@@ -2,6 +2,8 @@
 
 namespace Hj\File;
 
+use Hj\Exception\FileNotFoundException;
+use Hj\Exception\UndefinedColumnException;
 use Hj\Extractor;
 use Hj\Processor;
 use ParseCsv\Csv;
@@ -9,10 +11,12 @@ use ParseCsv\Csv;
 class MergedFile extends File
 {
     /**
-     * @param $fileName
+     * MergedFile constructor.
+     * @param string $fileName
      * @param Csv $csvParser
+     * @throws FileNotFoundException
      */
-    public function __construct($fileName, Csv $csvParser)
+    public function __construct(string $fileName, Csv $csvParser)
     {
         parent::__construct($fileName, $csvParser);
         $this->getCsvParser()->enclosure = '';
@@ -24,8 +28,9 @@ class MergedFile extends File
      * @param Processor $processor
      * @param Extractor $extractor
      * @param array $headers Mapping array between the column header that will host the data and the one where the data will be retrieved
+     * @throws UndefinedColumnException
      */
-    public function create(ReceiverFile $receiverFile, HostFile $hostFile, Processor $processor, Extractor $extractor, $headers)
+    public function create(ReceiverFile $receiverFile, HostFile $hostFile, Processor $processor, Extractor $extractor, array $headers)
     {
         $receiverRows = $receiverFile->getRows();
 
@@ -45,7 +50,7 @@ class MergedFile extends File
      * @param string $headerString
      * @param array $rows
      */
-    private function save($headerString, $rows)
+    private function save(string $headerString, array $rows)
     {
         if (file_exists($this->getFileName())) {
             unlink($this->getFileName());

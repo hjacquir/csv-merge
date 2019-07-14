@@ -5,13 +5,14 @@ namespace Hj;
 class Processor
 {
     /**
-     * @param $rowWhereToSaveData
-     * @param $rowWhereToGetData
-     * @param $headerWhereToSaveData
-     * @param $headerWhereToGetData
+     * @param array $rowWhereToSaveData
+     * @param array $rowWhereToGetData
+     * @param string $headerWhereToSaveData
+     * @param string $headerWhereToGetData
      * @param Extractor $extractor
+     * @throws Exception\UndefinedColumnException
      */
-    public function process(&$rowWhereToSaveData, $rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData, Extractor $extractor)
+    public function process(array &$rowWhereToSaveData, array $rowWhereToGetData, string $headerWhereToSaveData, string $headerWhereToGetData, Extractor $extractor)
     {
         $response = $extractor->extractData($rowWhereToSaveData, $rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData);
 

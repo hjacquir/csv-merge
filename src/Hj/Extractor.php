@@ -26,22 +26,21 @@ class Extractor
      * @param string $headerComparisonWhereToSaveData Comparison column header of the file hosting the data
      * @param string $headerComparisonWhereToGetData Comparison column header of the file where the data will be retrieved
      */
-    public function __construct($headerComparisonWhereToSaveData, $headerComparisonWhereToGetData)
+    public function __construct(string $headerComparisonWhereToSaveData, string $headerComparisonWhereToGetData)
     {
         $this->headerComparisonWhereToSaveData = trim($headerComparisonWhereToSaveData);
         $this->headerComparisonWhereToGetData = trim($headerComparisonWhereToGetData);
     }
 
     /**
-     * @param $rowWhereToSaveData
-     * @param $rowWhereToGetData
-     * @param $headerWhereToSaveData
-     * @param $headerWhereToGetData
+     * @param array $rowWhereToSaveData
+     * @param array $rowWhereToGetData
+     * @param string $headerWhereToSaveData
+     * @param string $headerWhereToGetData
      * @return bool
-     *
      * @throws UndefinedColumnException
      */
-    public function extractData(&$rowWhereToSaveData, $rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData)
+    public function extractData(array &$rowWhereToSaveData, array $rowWhereToGetData, string $headerWhereToSaveData, string $headerWhereToGetData) : bool
     {
        $this->ckeckHeader($this->headerComparisonWhereToSaveData, $rowWhereToSaveData);
        $this->ckeckHeader($this->headerComparisonWhereToGetData, $rowWhereToGetData);
@@ -59,12 +58,12 @@ class Extractor
     }
 
     /**
-     * @param $headerName
-     * @param $row
+     * @param string $headerName
+     * @param array $row
      *
      * @throws UndefinedColumnException
      */
-    private function ckeckHeader($headerName, $row) {
+    private function ckeckHeader(string $headerName, array $row) {
         if (!isset($row[$headerName])) {
             throw new UndefinedColumnException("The header : {$headerName} does not exist. Please check your csv file or your config yaml file.");
         }
@@ -76,7 +75,7 @@ class Extractor
      * @param string $headerWhereToSaveData
      * @param string $headerWhereToGetData
      */
-    private function sanitizeValue(&$rowWhereToSaveData, &$rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData)
+    private function sanitizeValue(array &$rowWhereToSaveData, array &$rowWhereToGetData, string $headerWhereToSaveData, string $headerWhereToGetData)
     {
         // sanitize value and set as empty string before saving
         $rowWhereToSaveData[$headerWhereToSaveData] = '';
@@ -97,7 +96,7 @@ class Extractor
     /**
      * @return Extractor
      */
-    public function getSuccessor()
+    public function getSuccessor() : Extractor
     {
         return $this->successor;
     }
@@ -105,7 +104,7 @@ class Extractor
     /**
      * @return bool
      */
-    public function hasSuccessor()
+    public function hasSuccessor() : bool
     {
         return $this->successor !== null;
     }
