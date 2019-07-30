@@ -16,16 +16,16 @@ Fusionner deux fichiers CSV en migrant une ou des données d'un fichier dans l'a
 Explications :
 ```yaml
 filePath:
-    receiver: "le fichier qui qui va contenir la donnée migrée.Ne pas oublier d'ajouter la colonne (si elle n'existe pas) qui va contenir la donnée."
+    receiver: "le fichier qui va contenir la donnée migrée. Ne pas oublier d'ajouter la colonne (si elle n'existe pas) qui va contenir la donnée."
     host: "le fichier qui contient déjà la donnée à migrer"
-    merged: "le fichier final fusionné. Il peut-être vide et n'oubliez pas de le créer avant"
+    merged: "le fichier final fusionné. Il peut-être vide. N'oubliez pas de le créer avant"
 keyHeader:
     - {receiver: "la clé de comparaison dans le fichier receiver", host: "la clé de comparaison dans le fichier host"}
     - {receiver: "la deuxième clé de comparaison si vous jugez que la première ne risque pas de matcher", host: "idem"}
     (Ici vous pouvez ajouter autant de nouvelle ligne que de clés de comparaison)
 migrationMapping:
-    En-tête de le colonne contenant la donnée à migrer du fichier host: "En-tête de le colonne qui va contenir la donnée migrée dans le fichier receiver"
-    headerHost2: "headerReceiver2"
+    - 'En-tête de le colonne contenant la donnée à migrer du fichier host': "En-tête de le colonne qui va contenir la donnée migrée dans le fichier receiver"
+    - 'headerHost2': "headerReceiver2"
     (Ici vous pouvez ajouter autant de nouvelle ligne que de paires de données à migrer)
 ```
 
