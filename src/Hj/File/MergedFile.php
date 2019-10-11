@@ -33,11 +33,16 @@ class MergedFile extends File
     public function create(ReceiverFile $receiverFile, HostFile $hostFile, Processor $processor, Extractor $extractor, array $headers)
     {
         $receiverRows = $receiverFile->getRows();
+        $hostRows = $hostFile->getRows();
 
         foreach ($receiverRows as $rowNumber => &$receiverRow) {
-            foreach ($hostFile->getRows() as $hostRow) {
-                foreach ($headers as $headerHost => $headerReceiver) {
-                    $processor->process($receiverRow, $hostRow, $headerReceiver, $headerHost, $extractor);
+            foreach ($hostRows as $key => $hostRow) {
+                $response = $processor->process($receiverRow, $hostRow, $extractor, $headers);
+                // si la response = true, la reference a ete trouvée on sort de la boucle
+                if ($response) {
+                    // on supprime la derniere reference trouvée pour ne plus l'inclure dans la recherche
+                    unset($hostRows[$key]);
+                    break;
                 }
             }
             $receiverRow = implode(';', $receiverRow);

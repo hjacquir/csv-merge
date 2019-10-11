@@ -40,16 +40,21 @@ class Extractor
      * @return bool
      * @throws UndefinedColumnException
      */
-    public function extractData(array &$rowWhereToSaveData, array $rowWhereToGetData, string $headerWhereToSaveData, string $headerWhereToGetData) : bool
+    public function extractData(array &$rowWhereToSaveData, array $rowWhereToGetData, array $headers) : bool
     {
-       $this->ckeckHeader($this->headerComparisonWhereToSaveData, $rowWhereToSaveData);
-       $this->ckeckHeader($this->headerComparisonWhereToGetData, $rowWhereToGetData);
-        $this->ckeckHeader($headerWhereToSaveData, $rowWhereToSaveData);
-        $this->ckeckHeader($headerWhereToGetData, $rowWhereToGetData);
-
+        /**
+         * todo : migrer cette étape de vérification du header au début
+         */
+//        $this->ckeckHeader($this->headerComparisonWhereToSaveData, $rowWhereToSaveData);
+//        $this->ckeckHeader($this->headerComparisonWhereToGetData, $rowWhereToGetData);
+//        $this->ckeckHeader($headerWhereToSaveData, $rowWhereToSaveData);
+//        $this->ckeckHeader($headerWhereToGetData, $rowWhereToGetData);
         if (trim($rowWhereToSaveData[$this->headerComparisonWhereToSaveData]) == trim($rowWhereToGetData[$this->headerComparisonWhereToGetData])) {
-            $this->sanitizeValue($rowWhereToSaveData, $rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData);
-            $rowWhereToSaveData[$headerWhereToSaveData] = $rowWhereToGetData[$headerWhereToGetData];
+            // on parcourt toutes les colonnes de mapping
+            foreach ($headers as $headerWhereToGetData => $headerWhereToSaveData) {
+                $this->sanitizeValue($rowWhereToSaveData, $rowWhereToGetData, $headerWhereToSaveData, $headerWhereToGetData);
+                $rowWhereToSaveData[$headerWhereToSaveData] = $rowWhereToGetData[$headerWhereToGetData];
+            }
 
             return true;
         }
