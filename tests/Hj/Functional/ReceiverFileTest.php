@@ -36,7 +36,7 @@ class ReceiverFileTest extends TestCase
 
     public function testGetHeaderReturnHeaderAsString()
     {
-        $this->assertEquals('header1;Header 2', $this->receiverFile->getHeader());
+        $this->assertEquals('header1;Header 2', $this->receiverFile->getHeaderAsString());
 
     }
 }

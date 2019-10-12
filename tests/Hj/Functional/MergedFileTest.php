@@ -2,11 +2,13 @@
 
 namespace Hj\Functional;
 
+use Hj\ConfigHeaderValidator;
 use Hj\Extractor;
 use Hj\File\HostFile;
 use Hj\File\MergedFile;
 use Hj\File\ReceiverFile;
 use Hj\Processor;
+use Hj\YamlConfigLoader;
 use ParseCsv\Csv;
 use PHPUnit\Framework\TestCase;
 
@@ -69,7 +71,8 @@ class MergedFileTest extends TestCase
             // migrate host file column 'Header 4' value to -> receiver file column 'Referer'
             'Header 4' => 'Referer'
         ];
-        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $mappingMigration);
+        $configHeaderValidator = new ConfigHeaderValidator($receiverFile, $hostFile, new YamlConfigLoader(__DIR__ . '/configFiles/config.yaml'));
+        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $mappingMigration, $configHeaderValidator);
         // the merged file contains data from receiver file
         // and the referer column was valorized from host file data
         $expected = array(
@@ -158,7 +161,8 @@ class MergedFileTest extends TestCase
             // migrate host file column 'Header 4' value to -> receiver file column 'Referer'
             'Header 4' => 'Referer'
         ];
-        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $mappingMigration);
+        $configHeaderValidator = new ConfigHeaderValidator($receiverFile, $hostFile, new YamlConfigLoader(__DIR__ . '/configFiles/config.yaml'));
+        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $mappingMigration, $configHeaderValidator);
         // the merged file contains data from receiver file
         // and the referer column was valorized from host file data
         $expected = array(

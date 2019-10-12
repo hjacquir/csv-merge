@@ -2,8 +2,6 @@
 
 namespace Hj;
 
-use Hj\Exception\UndefinedColumnException;
-
 class Extractor
 {
 
@@ -35,20 +33,11 @@ class Extractor
     /**
      * @param array $rowWhereToSaveData
      * @param array $rowWhereToGetData
-     * @param string $headerWhereToSaveData
-     * @param string $headerWhereToGetData
+     * @param array $headers
      * @return bool
-     * @throws UndefinedColumnException
      */
     public function extractData(array &$rowWhereToSaveData, array $rowWhereToGetData, array $headers) : bool
     {
-        /**
-         * todo : migrer cette étape de vérification du header au début
-         */
-//        $this->ckeckHeader($this->headerComparisonWhereToSaveData, $rowWhereToSaveData);
-//        $this->ckeckHeader($this->headerComparisonWhereToGetData, $rowWhereToGetData);
-//        $this->ckeckHeader($headerWhereToSaveData, $rowWhereToSaveData);
-//        $this->ckeckHeader($headerWhereToGetData, $rowWhereToGetData);
         if (trim($rowWhereToSaveData[$this->headerComparisonWhereToSaveData]) == trim($rowWhereToGetData[$this->headerComparisonWhereToGetData])) {
             // on parcourt toutes les colonnes de mapping
             foreach ($headers as $headerWhereToGetData => $headerWhereToSaveData) {
@@ -60,18 +49,6 @@ class Extractor
         }
 
         return false;
-    }
-
-    /**
-     * @param string $headerName
-     * @param array $row
-     *
-     * @throws UndefinedColumnException
-     */
-    private function ckeckHeader(string $headerName, array $row) {
-        if (!isset($row[$headerName])) {
-            throw new UndefinedColumnException("The header : {$headerName} does not exist. Please check your csv file or your config yaml file.");
-        }
     }
 
     /**

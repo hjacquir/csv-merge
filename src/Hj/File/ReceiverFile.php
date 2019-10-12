@@ -22,9 +22,9 @@ class ReceiverFile extends File
     /**
      * @return string
      */
-    public function getHeader() : string
+    public function getHeaderAsString() : string
     {
-        $headerArray = array_keys($this->getCsvParser()->data[0]);
+        $headerArray = $this->getHeaderAsArray();
         $headerString = implode(';', $headerArray);
 
         return $headerString;

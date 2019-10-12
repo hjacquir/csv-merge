@@ -2,6 +2,7 @@
 
 namespace Hj\File;
 
+use Hj\ConfigHeaderValidator;
 use Hj\Exception\FileNotFoundException;
 use Hj\Exception\UndefinedColumnException;
 use Hj\Extractor;
@@ -28,10 +29,12 @@ class MergedFile extends File
      * @param Processor $processor
      * @param Extractor $extractor
      * @param array $headers Mapping array between the column header that will host the data and the one where the data will be retrieved
+     * @param ConfigHeaderValidator $configHeaderValidator
      * @throws UndefinedColumnException
      */
-    public function create(ReceiverFile $receiverFile, HostFile $hostFile, Processor $processor, Extractor $extractor, array $headers)
+    public function create(ReceiverFile $receiverFile, HostFile $hostFile, Processor $processor, Extractor $extractor, array $headers, ConfigHeaderValidator $configHeaderValidator)
     {
+        $configHeaderValidator->valid();
         $receiverRows = $receiverFile->getRows();
         $hostRows = $hostFile->getRows();
 
@@ -48,7 +51,7 @@ class MergedFile extends File
             $receiverRow = implode(';', $receiverRow);
         }
 
-        $this->save($receiverFile->getHeader(), $receiverRows);
+        $this->save($receiverFile->getHeaderAsString(), $receiverRows);
     }
 
     /**

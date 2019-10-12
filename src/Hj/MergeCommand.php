@@ -68,7 +68,8 @@ class MergeCommand extends Command
         $migrationMapping = $configLoader->getMappingMigration();
         $processor = new Processor();
         $this->logger->info("Operation in progress ...");
-        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $migrationMapping);
+        $configHeaderValidator = new ConfigHeaderValidator($receiverFile, $hostFile, $configLoader);
+        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $migrationMapping, $configHeaderValidator);
         $this->logger->info("Operation completed. The merged file was generated in : {$configLoader->getMergedFilePath()}");
     }
 }

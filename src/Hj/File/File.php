@@ -46,6 +46,14 @@ abstract class File
     /**
      * @return array
      */
+    public function getHeaderAsArray() : array
+    {
+        return array_keys($this->csvParser->data[0]);
+    }
+
+    /**
+     * @return array
+     */
     public function getRows() : array
     {
         return $this->getCsvParser()->data;

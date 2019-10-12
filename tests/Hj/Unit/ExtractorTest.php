@@ -31,7 +31,7 @@ class ExtractorTest extends TestCase
             'bar' => 'bla',
             'foo' => 'world',
         ];
-        $response = $extractor->extractData($row1, $row2, 'hello', 'foo');
+        $response = $extractor->extractData($row1, $row2, ['foo' => 'hello']);
         $this->assertTrue($response);
         // data world was migrated
         $this->assertEquals([
@@ -51,7 +51,7 @@ class ExtractorTest extends TestCase
             'bar' => 'bla',
             'foo' => 'world',
         ];
-        $response = $extractor->extractData($row1, $row2, 'hello', 'foo');
+        $response = $extractor->extractData($row1, $row2, ['foo' => 'hello']);
         $this->assertFalse($response);
         // data world was not migrated
         $this->assertEquals([
@@ -71,7 +71,7 @@ class ExtractorTest extends TestCase
             'bar' => 'bla',
             'foo' => 'NULL',
         ];
-        $response = $extractor->extractData($row1, $row2, 'hello', 'foo');
+        $response = $extractor->extractData($row1, $row2, ['foo' => 'hello']);
         $this->assertTrue($response);
         // not world value is removed
         // NULL value is replaced by an empty string ''
@@ -79,73 +79,5 @@ class ExtractorTest extends TestCase
             'foo' => 'bla',
             'hello' => '',
         ], $row1);
-    }
-
-    /**
-     * @expectedException \Hj\Exception\UndefinedColumnException
-     */
-    public function testExtractThrowExceptionWhenComparisonHeaderToSaveDataDoesNotExist()
-    {
-        $extractor = new Extractor('foo_do_not_exist', 'bar');
-        $row1 = [
-            'foo' => 'bla',
-            'hello' => 'not world',
-        ];
-        $row2 = [
-            'bar' => 'bla',
-            'foo' => 'NULL',
-        ];
-        $extractor->extractData($row1, $row2, 'hello', 'foo');
-    }
-
-    /**
-     * @expectedException \Hj\Exception\UndefinedColumnException
-     */
-    public function testExtractThrowExceptionWhenComparisonHeaderToGetDataDoesNotExist()
-    {
-        $extractor = new Extractor('foo', 'bar_do_not_exist');
-        $row1 = [
-            'foo' => 'bla',
-            'hello' => 'not world',
-        ];
-        $row2 = [
-            'bar' => 'bla',
-            'foo' => 'NULL',
-        ];
-        $extractor->extractData($row1, $row2, 'hello', 'foo');
-    }
-
-    /**
-     * @expectedException \Hj\Exception\UndefinedColumnException
-     */
-    public function testExtractThrowExceptionWhenHeaderToGetDatDoesNotExist()
-    {
-        $extractor = new Extractor('foo', 'bar');
-        $row1 = [
-            'foo' => 'bla',
-            'hello' => 'not world',
-        ];
-        $row2 = [
-            'bar' => 'bla',
-            'foo' => 'NULL',
-        ];
-        $extractor->extractData($row1, $row2, 'helloDoNotExist', 'foo');
-    }
-
-    /**
-     * @expectedException \Hj\Exception\UndefinedColumnException
-     */
-    public function testExtractThrowExceptionWhenHeaderToSaveDatDoesNotExist()
-    {
-        $extractor = new Extractor('foo', 'bar');
-        $row1 = [
-            'foo' => 'bla',
-            'hello' => 'not world',
-        ];
-        $row2 = [
-            'bar' => 'bla',
-            'foo' => 'NULL',
-        ];
-        $extractor->extractData($row1, $row2, 'hello', 'fooDoNotExist');
     }
 }

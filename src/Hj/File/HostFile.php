@@ -18,5 +18,4 @@ class HostFile extends File
         parent::__construct($fileName, $csvParser);
 
     }
-
 }
