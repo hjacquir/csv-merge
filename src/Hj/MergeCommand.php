@@ -49,6 +49,7 @@ class MergeCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->logger->info("Operation started ...");
         $yamlConfigFilePath = $input->getArgument('yamlConfigFilePath');
         $configLoader = new YamlConfigLoader($yamlConfigFilePath);
         $receiverFile = new ReceiverFile($configLoader->getReceiverFilePath(), new Csv());
@@ -67,9 +68,9 @@ class MergeCommand extends Command
         }
         $migrationMapping = $configLoader->getMappingMigration();
         $processor = new Processor();
-        $this->logger->info("Operation in progress ...");
-        $configHeaderValidator = new ConfigHeaderValidator($receiverFile, $hostFile, $configLoader);
-        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $migrationMapping, $configHeaderValidator);
+
+        $configHeaderValidator = new ConfigHeaderValidator($receiverFile, $hostFile, $configLoader, $this->logger);
+        $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $migrationMapping, $configHeaderValidator, $this->logger);
         $this->logger->info("Operation completed. The merged file was generated in : {$configLoader->getMergedFilePath()}");
     }
 }

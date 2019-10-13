@@ -6,6 +6,7 @@ namespace Hj;
 use Hj\Exception\UndefinedColumnException;
 use Hj\File\HostFile;
 use Hj\File\ReceiverFile;
+use Monolog\Logger;
 
 /**
  * Created by jacquirhatim@gmail.com
@@ -31,16 +32,23 @@ class ConfigHeaderValidator
     private $configLoader;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * HeaderValidator constructor.
      * @param ReceiverFile $receiverFile
      * @param HostFile $hostFile
      * @param YamlConfigLoader $configLoader
+     * @param Logger $logger
      */
-    public function __construct(ReceiverFile $receiverFile, HostFile $hostFile, YamlConfigLoader $configLoader)
+    public function __construct(ReceiverFile $receiverFile, HostFile $hostFile, YamlConfigLoader $configLoader, Logger $logger)
     {
         $this->receiverFile = $receiverFile;
         $this->hostFile = $hostFile;
         $this->configLoader = $configLoader;
+        $this->logger = $logger;
     }
 
 
@@ -52,7 +60,10 @@ class ConfigHeaderValidator
      */
     private function ckeckHeader(string $headerName, array $headers) {
         if (!in_array($headerName, $headers)) {
-            throw new UndefinedColumnException("The header : {$headerName}, does not exist. Please check your csv file or your config yaml file.");
+            /** @var string $message */
+            $message = "The header : {$headerName}, does not exist. Please check your csv file or your config yaml file.";
+            $this->logger->error($message);
+            throw new UndefinedColumnException($message);
         }
     }
 
@@ -61,6 +72,7 @@ class ConfigHeaderValidator
      */
     public function valid()
     {
+        $this->logger->info("Header validation started ...");
         $hostFileHeaders = $this->hostFile->getHeaderAsArray();
         $receiverFileHeaders = $this->receiverFile->getHeaderAsArray();
 
@@ -73,5 +85,6 @@ class ConfigHeaderValidator
             $this->ckeckHeader($receiver, $receiverFileHeaders);
             $this->ckeckHeader($host, $hostFileHeaders);
         }
+        $this->logger->info("Header validation done. All header are OK ...");
     }
 }

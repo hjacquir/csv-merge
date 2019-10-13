@@ -7,6 +7,7 @@ use Hj\Exception\FileNotFoundException;
 use Hj\Exception\UndefinedColumnException;
 use Hj\Extractor;
 use Hj\Processor;
+use Monolog\Logger;
 use ParseCsv\Csv;
 
 class MergedFile extends File
@@ -30,13 +31,18 @@ class MergedFile extends File
      * @param Extractor $extractor
      * @param array $headers Mapping array between the column header that will host the data and the one where the data will be retrieved
      * @param ConfigHeaderValidator $configHeaderValidator
+     * @param Logger $logger
      * @throws UndefinedColumnException
      */
-    public function create(ReceiverFile $receiverFile, HostFile $hostFile, Processor $processor, Extractor $extractor, array $headers, ConfigHeaderValidator $configHeaderValidator)
+    public function create(ReceiverFile $receiverFile, HostFile $hostFile, Processor $processor, Extractor $extractor, array $headers, ConfigHeaderValidator $configHeaderValidator, Logger $logger)
     {
         $configHeaderValidator->valid();
         $receiverRows = $receiverFile->getRows();
         $hostRows = $hostFile->getRows();
+
+        $this->removeFileIfExistAndAddHeader($receiverFile->getHeaderAsString());
+        $logger->info("Header was added to merged file ...");
+        $logger->info("Migration operation was started ...");
 
         foreach ($receiverRows as $rowNumber => &$receiverRow) {
             foreach ($hostRows as $key => $hostRow) {
@@ -49,16 +55,26 @@ class MergedFile extends File
                 }
             }
             $receiverRow = implode(';', $receiverRow);
-        }
 
-        $this->save($receiverFile->getHeaderAsString(), $receiverRows);
+            $this->appendRow($receiverRow);
+        }
+        $logger->info("Migration operation done succesfully ...");
+    }
+
+    /**
+     * @param string $row
+     */
+    private function appendRow(string $row)
+    {
+        $this->getCsvParser()->save($this->getFileName(), array(
+            array($row)
+        ), true);
     }
 
     /**
      * @param string $headerString
-     * @param array $rows
      */
-    private function save(string $headerString, array $rows)
+    private function removeFileIfExistAndAddHeader(string $headerString)
     {
         if (file_exists($this->getFileName())) {
             unlink($this->getFileName());
@@ -67,11 +83,5 @@ class MergedFile extends File
         $this->getCsvParser()->save($this->getFileName(), array(
             array($headerString)
         ), true);
-
-        foreach ($rows as $item) {
-            $this->getCsvParser()->save($this->getFileName(), array(
-                array($item)
-            ), true);
-        }
     }
 }
