@@ -5,6 +5,7 @@ namespace Hj;
 use Hj\File\HostFile;
 use Hj\File\MergedFile;
 use Hj\File\ReceiverFile;
+use Hj\Validator\YamlFile\KeyValueValidator\ConfigFileValidator;
 use Monolog\Logger;
 use ParseCsv\Csv;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +52,7 @@ class MergeCommand extends Command
     {
         $this->logger->info("Operation started ...");
         $yamlConfigFilePath = $input->getArgument('yamlConfigFilePath');
-        $configLoader = new YamlConfigLoader($yamlConfigFilePath);
+        $configLoader = new YamlConfigLoader($yamlConfigFilePath, new ConfigFileValidator($yamlConfigFilePath));
         $receiverFile = new ReceiverFile($configLoader->getReceiverFilePath(), new Csv());
         $hostFile = new HostFile($configLoader->getHostFilePath(), new Csv());
         $mergedFile = new MergedFile($configLoader->getMergedFilePath(), new Csv());

@@ -48,6 +48,7 @@ class MergedFile extends File
             foreach ($hostRows as $key => $hostRow) {
                 $response = $processor->process($receiverRow, $hostRow, $extractor, $headers);
                 // si la response = true, la reference a ete trouvée on sort de la boucle
+                // @todo : add migrationRelation condition
                 if ($response) {
                     // on supprime la derniere reference trouvée pour ne plus l'inclure dans la recherche
                     unset($hostRows[$key]);
