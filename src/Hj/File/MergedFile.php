@@ -58,7 +58,7 @@ class MergedFile extends File
 
             $this->appendRow($receiverRow);
         }
-        $logger->info("Migration operation done succesfully ...");
+        $logger->info("Migration operation done successfully ...");
     }
 
     /**

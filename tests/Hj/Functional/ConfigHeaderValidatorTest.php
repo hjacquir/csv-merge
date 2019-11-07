@@ -8,6 +8,7 @@ use Hj\ConfigHeaderValidator;
 use Hj\File\HostFile;
 use Hj\File\ReceiverFile;
 use Hj\YamlConfigLoader;
+use Monolog\Logger;
 use ParseCsv\Csv;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +33,11 @@ class ConfigHeaderValidatorTest extends TestCase
      */
     private $configFilePath;
 
+    /**
+     * @var Logger
+     */
+    private $logger;
+
     public function setUp()
     {
         $csvFilePath = __DIR__ . '/csvFiles/';
@@ -39,6 +45,7 @@ class ConfigHeaderValidatorTest extends TestCase
 
         $this->receiverFile = new ReceiverFile($csvFilePath . 'receiver.csv', new Csv());
         $this->hostFile = new HostFile($csvFilePath . 'host.csv', new Csv());
+        $this->logger = new Logger('test');
 
     }
 
@@ -51,7 +58,7 @@ class ConfigHeaderValidatorTest extends TestCase
 
         $configLoader = new YamlConfigLoader($this->configFilePath . 'config_receiverKeyHeaderNotExist.yaml');
 
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader);
+        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
         $validator->valid();
     }
 
@@ -64,7 +71,7 @@ class ConfigHeaderValidatorTest extends TestCase
 
         $configLoader = new YamlConfigLoader($this->configFilePath . 'config_hostKeyHeaderNotExist.yaml');
 
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader);
+        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
         $validator->valid();
     }
 
@@ -77,7 +84,7 @@ class ConfigHeaderValidatorTest extends TestCase
 
         $configLoader = new YamlConfigLoader($this->configFilePath . 'config_receiverMigrationMappingHeaderNotExist.yaml');
 
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader);
+        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
         $validator->valid();
     }
 
@@ -90,7 +97,7 @@ class ConfigHeaderValidatorTest extends TestCase
 
         $configLoader = new YamlConfigLoader($this->configFilePath . 'config_hostMigrationMappingHeaderNotExist.yaml');
 
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader);
+        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
         $validator->valid();
     }
 }
