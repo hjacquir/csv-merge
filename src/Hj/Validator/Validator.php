@@ -4,5 +4,5 @@ namespace Hj\Validator;
 
 interface Validator
 {
-    public function valid($value);
+    public function valid($value, $yamlFile);
 }

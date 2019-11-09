@@ -29,5 +29,8 @@ class ConfigFileValidator extends KeyValueValidator
         $this->valueIsString($value[YamlConfigLoader::KEY_FILE_PATH][YamlConfigLoader::KEY_RECEIVER], YamlConfigLoader::KEY_RECEIVER);
         $this->valueIsString($value[YamlConfigLoader::KEY_FILE_PATH][YamlConfigLoader::KEY_HOST], YamlConfigLoader::KEY_HOST);
         $this->valueIsString($value[YamlConfigLoader::KEY_FILE_PATH][YamlConfigLoader::KEY_MERGED], YamlConfigLoader::KEY_MERGED);
+
+        $this->valueIsArray($value[YamlConfigLoader::KEY_KEYHEADER], YamlConfigLoader::KEY_KEYHEADER);
+
     }
 }

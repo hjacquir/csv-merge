@@ -52,7 +52,7 @@ class MergeCommand extends Command
     {
         $this->logger->info("Operation started ...");
         $yamlConfigFilePath = $input->getArgument('yamlConfigFilePath');
-        $configLoader = new YamlConfigLoader($yamlConfigFilePath, new ConfigFileValidator($yamlConfigFilePath));
+        $configLoader = new YamlConfigLoader($yamlConfigFilePath, new ConfigFileValidator());
         $receiverFile = new ReceiverFile($configLoader->getReceiverFilePath(), new Csv());
         $hostFile = new HostFile($configLoader->getHostFilePath(), new Csv());
         $mergedFile = new MergedFile($configLoader->getMergedFilePath(), new Csv());

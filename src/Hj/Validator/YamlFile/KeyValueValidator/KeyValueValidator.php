@@ -14,16 +14,6 @@ abstract class KeyValueValidator implements Validator
     private $yamlFilePath;
 
     /**
-     * KeyValueValidator constructor.
-     * @param string $yamlFilePath
-     */
-    public function __construct(string $yamlFilePath)
-    {
-        $this->yamlFilePath = $yamlFilePath;
-    }
-
-
-    /**
      * @param array $array
      * @param string $keyName
      * @throws YamlKeyNotDefined
@@ -55,8 +45,9 @@ abstract class KeyValueValidator implements Validator
 
     }
 
-    public function valid($value)
+    public function valid($value, $yamlFilePath)
     {
+        $this->yamlFilePath = $yamlFilePath;
         $this->isValid($value);
     }
 

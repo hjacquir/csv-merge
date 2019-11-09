@@ -59,7 +59,7 @@ class YamlConfigLoader
     {
         $this->yamlFile = $yamlFile;
         $this->parsedValues = Yaml::parseFile($this->yamlFile);
-        $validator->valid($this->parsedValues);
+        $validator->valid($this->parsedValues, $this->yamlFile);
     }
 
     /**
