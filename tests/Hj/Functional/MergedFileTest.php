@@ -8,6 +8,7 @@ use Hj\File\HostFile;
 use Hj\File\MergedFile;
 use Hj\File\ReceiverFile;
 use Hj\Processor;
+use Hj\Validator\YamlFile\KeyValueValidator\ConfigFileValidator;
 use Hj\YamlConfigLoader;
 use Monolog\Logger;
 use ParseCsv\Csv;
@@ -32,12 +33,12 @@ class MergedFileTest extends TestCase
         // we have to empty the file for the purposes of the test
         file_put_contents($csvTestFilesBasePath . 'merged.csv', '');
 
-        $mergedFile = new MergedFile($csvTestFilesBasePath . 'merged.csv', new Csv());
+        $mergedFile = $this->buildMergedFile($csvTestFilesBasePath . 'merged.csv');
         // the merged file is empty
         $expected = [];
-        $this->assertEquals($expected, $mergedFile->getRows());
+        parent::assertEquals($expected, $mergedFile->getRows());
 
-        $receiverFile = new ReceiverFile($csvTestFilesBasePath . 'receiver.csv', new Csv());
+        $receiverFile = $this->buildReceiverFile($csvTestFilesBasePath . 'receiver.csv');
         // the receiver file referer column is empty
         $expected = array(
             0 =>
@@ -55,9 +56,9 @@ class MergedFileTest extends TestCase
                     'Referer' => '',
                 ),
         );
-        $this->assertEquals($expected, $receiverFile->getRows());
+        parent::assertEquals($expected, $receiverFile->getRows());
 
-        $hostFile = new HostFile($csvTestFilesBasePath . 'host.csv', new Csv());
+        $hostFile = $this->buildHostFile($csvTestFilesBasePath . 'host.csv');
         // the host file referer column is valorized
         $expected = array(
             0 =>
@@ -75,7 +76,7 @@ class MergedFileTest extends TestCase
                     'Header 4' => '7785',
                 ),
         );
-        $this->assertEquals($expected, $hostFile->getRows());
+        parent::assertEquals($expected, $hostFile->getRows());
         // compare receiver file column 'header 1' to host file column 'Header 3'
         $extractor = new Extractor('header1', 'Header 3');
         $processor = new Processor();
@@ -83,7 +84,7 @@ class MergedFileTest extends TestCase
             // migrate host file column 'Header 4' value to -> receiver file column 'Referer'
             'Header 4' => 'Referer'
         ];
-        $configHeaderValidator = new ConfigHeaderValidator($receiverFile, $hostFile, new YamlConfigLoader(__DIR__ . '/configFiles/config.yaml'), $this->logger);
+        $configHeaderValidator = $this->buildConfigHeaderValidator($receiverFile, $hostFile, __DIR__ . '/configFiles/config.yaml');
         $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $mappingMigration, $configHeaderValidator, $this->logger);
         // the merged file contains data from receiver file
         // and the referer column was valorized from host file data
@@ -103,8 +104,8 @@ class MergedFileTest extends TestCase
                     'Referer' => '411', // = host file 'Header 4'
                 ),
         );
-        $mergedFileForAssertion = new MergedFile($csvTestFilesBasePath . 'merged.csv', new Csv());
-        $this->assertEquals($expected, $mergedFileForAssertion->getRows());
+        $mergedFileForAssertion = $this->buildMergedFile($csvTestFilesBasePath . 'merged.csv');
+        parent::assertEquals($expected, $mergedFileForAssertion->getRows());
     }
 
     public function testCreateWithExtractorWithSuccessor()
@@ -113,12 +114,12 @@ class MergedFileTest extends TestCase
         // we have to empty the file for the purposes of the test
         file_put_contents($csvTestFilesBasePath . 'merged.csv', '');
 
-        $mergedFile = new MergedFile($csvTestFilesBasePath . 'merged.csv', new Csv());
+        $mergedFile = $this->buildMergedFile($csvTestFilesBasePath . 'merged.csv');
         // the merged file is empty
         $expected = [];
-        $this->assertEquals($expected, $mergedFile->getRows());
+        parent::assertEquals($expected, $mergedFile->getRows());
 
-        $receiverFile = new ReceiverFile($csvTestFilesBasePath . 'receiver.csv', new Csv());
+        $receiverFile = $this->buildReceiverFile($csvTestFilesBasePath . 'receiver.csv');
         // the receiver file referer column is empty
         $expected = array(
             0 =>
@@ -136,9 +137,9 @@ class MergedFileTest extends TestCase
                     'Referer' => '',
                 ),
         );
-        $this->assertEquals($expected, $receiverFile->getRows());
+        parent::assertEquals($expected, $receiverFile->getRows());
 
-        $hostFile = new HostFile($csvTestFilesBasePath . 'hostWithSuccessor.csv', new Csv());
+        $hostFile = $this->buildHostFile($csvTestFilesBasePath . 'hostWithSuccessor.csv');
         // the host file referer column is valorized
         $expected = array(
             0 =>
@@ -163,7 +164,7 @@ class MergedFileTest extends TestCase
                     'Header 4' => '7785',
                 ),
         );
-        $this->assertEquals($expected, $hostFile->getRows());
+        parent::assertEquals($expected, $hostFile->getRows());
         // compare receiver file column 'header 1' to host file column 'Header 3'
         $extractor = new Extractor('header1', 'Header 3');
         $successorExtractor = new Extractor('header1', 'Header 2');
@@ -173,7 +174,7 @@ class MergedFileTest extends TestCase
             // migrate host file column 'Header 4' value to -> receiver file column 'Referer'
             'Header 4' => 'Referer'
         ];
-        $configHeaderValidator = new ConfigHeaderValidator($receiverFile, $hostFile, new YamlConfigLoader(__DIR__ . '/configFiles/config.yaml'), $this->logger);
+        $configHeaderValidator = $this->buildConfigHeaderValidator($receiverFile, $hostFile, __DIR__ . '/configFiles/config.yaml');
         $mergedFile->create($receiverFile, $hostFile, $processor, $extractor, $mappingMigration, $configHeaderValidator, $this->logger);
         // the merged file contains data from receiver file
         // and the referer column was valorized from host file data
@@ -193,7 +194,65 @@ class MergedFileTest extends TestCase
                     'Referer' => '411', // = host file 'Header 4'
                 ),
         );
-        $mergedFileForAssertion = new MergedFile($csvTestFilesBasePath . 'merged.csv', new Csv());
-        $this->assertEquals($expected, $mergedFileForAssertion->getRows());
+        $mergedFileForAssertion = $this->buildMergedFile($csvTestFilesBasePath . 'merged.csv');
+        parent::assertEquals($expected, $mergedFileForAssertion->getRows());
+    }
+
+    /**
+     * @param string $fileName
+     * @return MergedFile
+     * @throws \Hj\Exception\FileNotFoundException
+     */
+    private function buildMergedFile(string $fileName)
+    {
+        return new MergedFile(
+            $fileName,
+            new Csv(),
+            []
+        );
+    }
+
+    /**
+     * @param string $fileName
+     * @return ReceiverFile
+     * @throws \Hj\Exception\FileNotFoundException
+     */
+    private function buildReceiverFile(string $fileName)
+    {
+        return new ReceiverFile(
+            $fileName,
+            new Csv()
+        );
+    }
+
+    /**
+     * @param string $fileName
+     * @return HostFile
+     * @throws \Hj\Exception\FileNotFoundException
+     */
+    private function buildHostFile(string $fileName)
+    {
+        return new HostFile(
+            $fileName,
+            new Csv()
+        );
+    }
+
+    /**
+     * @param $receiverFile
+     * @param $hostFile
+     * @param $configFilePath
+     * @return ConfigHeaderValidator
+     */
+    private function buildConfigHeaderValidator($receiverFile, $hostFile, $configFilePath)
+    {
+        $loader = new YamlConfigLoader($configFilePath, new ConfigFileValidator());
+
+        return new ConfigHeaderValidator(
+          $receiverFile,
+            $hostFile,
+            $loader,
+            $this->logger
+        );
     }
 }
