@@ -2,7 +2,7 @@
 
 namespace Hj;
 
-use Hj\Validator\Validator;
+use Hj\Validator\YamlFile\KeyValueValidator\ConfigFileValidator;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlConfigLoader
@@ -52,10 +52,12 @@ class YamlConfigLoader
     private $mappingRelation;
 
     /**
+     * YamlConfigLoader constructor.
+     *
      * @param string $yamlFile
-     * @param Validator $validator
+     * @param ConfigFileValidator $validator
      */
-    public function __construct(string $yamlFile, Validator $validator)
+    public function __construct(string $yamlFile, ConfigFileValidator $validator)
     {
         $this->yamlFile = $yamlFile;
         $this->parsedValues = Yaml::parseFile($this->yamlFile);
