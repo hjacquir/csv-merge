@@ -6,3 +6,4 @@ keyHeader:
     - {receiver: "header1", host: "FOO"}
 migrationMapping:
     'Header 3': "Header 2"
+mappingRelation: "OneToOne"

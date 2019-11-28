@@ -7,6 +7,7 @@ namespace Hj\Tests\Functional;
 use Hj\ConfigHeaderValidator;
 use Hj\File\HostFile;
 use Hj\File\ReceiverFile;
+use Hj\Validator\YamlFile\KeyValueValidator\ConfigFileValidator;
 use Hj\YamlConfigLoader;
 use Monolog\Logger;
 use ParseCsv\Csv;
@@ -55,10 +56,7 @@ class ConfigHeaderValidatorTest extends TestCase
      */
     public function testValidThrowExceptionWhenReceiverKeyHeaderDoesNotExist()
     {
-
-        $configLoader = new YamlConfigLoader($this->configFilePath . 'config_receiverKeyHeaderNotExist.yaml');
-
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
+        $validator = $this->buildValidator($this->configFilePath . 'config_receiverKeyHeaderNotExist.yaml');
         $validator->valid();
     }
 
@@ -68,10 +66,7 @@ class ConfigHeaderValidatorTest extends TestCase
      */
     public function testValidThrowExceptionWhenHostKeyHeaderDoesNotExist()
     {
-
-        $configLoader = new YamlConfigLoader($this->configFilePath . 'config_hostKeyHeaderNotExist.yaml');
-
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
+        $validator = $this->buildValidator($this->configFilePath . 'config_hostKeyHeaderNotExist.yaml');
         $validator->valid();
     }
 
@@ -81,10 +76,7 @@ class ConfigHeaderValidatorTest extends TestCase
      */
     public function testValidThrowExceptionWhenReceiverMigrationMappingHeaderDoesNotExist()
     {
-
-        $configLoader = new YamlConfigLoader($this->configFilePath . 'config_receiverMigrationMappingHeaderNotExist.yaml');
-
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
+        $validator = $this->buildValidator($this->configFilePath . 'config_receiverMigrationMappingHeaderNotExist.yaml');
         $validator->valid();
     }
 
@@ -94,10 +86,28 @@ class ConfigHeaderValidatorTest extends TestCase
      */
     public function testValidThrowExceptionWhenHostMigrationMappingHeaderDoesNotExist()
     {
-
-        $configLoader = new YamlConfigLoader($this->configFilePath . 'config_hostMigrationMappingHeaderNotExist.yaml');
-
-        $validator = new ConfigHeaderValidator($this->receiverFile, $this->hostFile, $configLoader, $this->logger);
+        $validator = $this->buildValidator($this->configFilePath . 'config_hostMigrationMappingHeaderNotExist.yaml');
         $validator->valid();
+    }
+
+    /**
+     * @param $yamlFilePath
+     * @return ConfigHeaderValidator
+     */
+    private function buildValidator($yamlFilePath)
+    {
+        $loader = new YamlConfigLoader(
+            $yamlFilePath,
+            new ConfigFileValidator()
+        );
+
+        $validator = new ConfigHeaderValidator(
+            $this->receiverFile,
+            $this->hostFile,
+            $loader,
+            $this->logger
+        );
+
+        return $validator;
     }
 }
