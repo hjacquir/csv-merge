@@ -13,15 +13,22 @@ use ParseCsv\Csv;
 class MergedFile extends File
 {
     /**
+     * @var array MappingRelation[]
+     */
+    private $mappingRelation = [];
+
+    /**
      * MergedFile constructor.
      * @param string $fileName
      * @param Csv $csvParser
+     * @param array $mappingRelation
      * @throws FileNotFoundException
      */
-    public function __construct(string $fileName, Csv $csvParser)
+    public function __construct(string $fileName, Csv $csvParser, array $mappingRelation)
     {
         parent::__construct($fileName, $csvParser);
         $this->getCsvParser()->enclosure = '';
+        $this->mappingRelation = $mappingRelation;
     }
 
     /**
@@ -50,8 +57,9 @@ class MergedFile extends File
                 // si la response = true, la reference a ete trouvée on sort de la boucle
                 // @todo : add migrationRelation condition
                 if ($response) {
-                    // on supprime la derniere reference trouvée pour ne plus l'inclure dans la recherche
-                    unset($hostRows[$key]);
+                    foreach ($this->mappingRelation as $mappingRelation) {
+                        $hostRows = $mappingRelation->map($hostRows, $key);
+                    }
                     break;
                 }
             }

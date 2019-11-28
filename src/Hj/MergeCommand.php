@@ -5,6 +5,8 @@ namespace Hj;
 use Hj\File\HostFile;
 use Hj\File\MergedFile;
 use Hj\File\ReceiverFile;
+use Hj\MappingRelation\ManyToOne;
+use Hj\MappingRelation\OneToOne;
 use Hj\Validator\YamlFile\KeyValueValidator\ConfigFileValidator;
 use Monolog\Logger;
 use ParseCsv\Csv;
@@ -55,7 +57,16 @@ class MergeCommand extends Command
         $configLoader = new YamlConfigLoader($yamlConfigFilePath, new ConfigFileValidator());
         $receiverFile = new ReceiverFile($configLoader->getReceiverFilePath(), new Csv());
         $hostFile = new HostFile($configLoader->getHostFilePath(), new Csv());
-        $mergedFile = new MergedFile($configLoader->getMergedFilePath(), new Csv());
+        $oneToOne = new OneToOne($configLoader);
+        $manyToOne = new ManyToOne($configLoader);
+        $mergedFile = new MergedFile(
+            $configLoader->getMergedFilePath(),
+            new Csv(),
+            [
+            $oneToOne,
+            $manyToOne,
+            ]
+        );
         $keyHeaders = $configLoader->getKeyHeader();
         $extractor = new Extractor('', '');
         foreach ($keyHeaders as $key => $keyHeader) {

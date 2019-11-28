@@ -16,13 +16,16 @@ class OneToOne implements MappingRelation
         $this->yamlConfigLoader = $yamlConfigLoader;
     }
 
-    public function map($value)
+    /**
+     * @param $value
+     * @param $key
+     * @return array
+     */
+    public function map($value, $key)
     {
-        unset($value);
-    }
-
-    public function isMappable()
-    {
-        return $this->yamlConfigLoader->getMappingRelation() === MappingRelation::ONE_TO_ONE;
+        if ($this->yamlConfigLoader->getMappingRelation() === MappingRelation::ONE_TO_ONE) {
+            array_splice($value, $key, 1);
+        }
+        return $value;
     }
 }

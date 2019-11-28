@@ -67,7 +67,7 @@ class YamlConfigLoader
      */
     public function getMappingRelation(): string
     {
-        $this->receiverFilePath = $this->parsedValues[self::KEY_MAPPING_RELATION];
+        $this->mappingRelation = $this->parsedValues[self::KEY_MAPPING_RELATION];
         return $this->mappingRelation;
     }
 

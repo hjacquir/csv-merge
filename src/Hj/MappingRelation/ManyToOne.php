@@ -16,13 +16,14 @@ class ManyToOne implements MappingRelation
         $this->yamlConfigLoader = $yamlConfigLoader;
     }
 
-    public function map($value)
+    /**
+     * @param $value
+     * @param $key
+     * @return array
+     */
+    public function map($value, $key)
     {
         // do nothing here
-    }
-
-    public function isMappable()
-    {
-        return $this->yamlConfigLoader->getMappingRelation() === MappingRelation::MANY_TO_ONE;
+        return $value;
     }
 }
