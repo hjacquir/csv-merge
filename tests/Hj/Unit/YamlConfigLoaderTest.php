@@ -2,7 +2,9 @@
 
 namespace Hj\Tests\Unit;
 
+use Hj\Validator\YamlFile\KeyValueValidator\ConfigFileValidator;
 use Hj\YamlConfigLoader;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class YamlConfigLoaderTest extends TestCase
@@ -12,29 +14,36 @@ class YamlConfigLoaderTest extends TestCase
      */
     private $loader;
 
+    /**
+     * @var ConfigFileValidator | MockObject
+     */
+    private $configFileValidator;
+
     protected function setUp()
     {
-        $this->loader = new YamlConfigLoader(__DIR__ . '/config.yaml');
+        $this->configFileValidator = parent::getMockBuilder(ConfigFileValidator::class)->getMock();
+
+        $this->loader = new YamlConfigLoader(__DIR__ . '/config.yaml', $this->configFileValidator);
     }
 
     public function testGetReceiverFilePath()
     {
-        $this->assertSame('testFilePath/receiver.csv', $this->loader->getReceiverFilePath());
+        parent::assertSame('testFilePath/receiver.csv', $this->loader->getReceiverFilePath());
     }
 
     public function testGetHostFilePath()
     {
-        $this->assertSame('testFilePath/host.csv', $this->loader->getHostFilePath());
+        parent::assertSame('testFilePath/host.csv', $this->loader->getHostFilePath());
     }
 
     public function testGetMergedFilePath()
     {
-        $this->assertSame('testFilePath/merged.csv', $this->loader->getMergedFilePath());
+        parent::assertSame('testFilePath/merged.csv', $this->loader->getMergedFilePath());
     }
 
     public function testGetKeyHeader()
     {
-        $this->assertSame([
+        parent::assertSame([
             0 => [
                 'receiver' => 'keyHeaderReceiver',
                 'host' => 'keyHeaderHost',
@@ -49,7 +58,7 @@ class YamlConfigLoaderTest extends TestCase
 
     public function testGetMappingMigration()
     {
-        $this->assertSame([
+        parent::assertSame([
             'headerHost1' => 'headerReceiver1',
             'headerHost2' => 'headerReceiver2',
         ],
