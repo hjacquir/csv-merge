@@ -3,6 +3,7 @@
 namespace Hj\Validator\YamlFile\KeyValueValidator;
 
 use Hj\Exception\YamlKeyNotDefined;
+use Hj\Exception\YamlValueUnauthorized;
 use Hj\Exception\YamlValueWrongFormat;
 use Hj\Validator\Validator;
 
@@ -43,6 +44,19 @@ abstract class KeyValueValidator implements Validator
             throw new YamlValueWrongFormat("Wrong yaml file configuration in : '{$this->yamlFilePath}'. The value for the key : '{$key}' must be an string. Please check your yaml file.");
         }
 
+    }
+
+    /**
+     * @param string $value
+     * @param string $key
+     * @param array $authorizedValues
+     * @throws YamlValueUnauthorized
+     */
+    protected function authorizedValues($value, $key, array $authorizedValues)
+    {
+        if (!in_array($value, $authorizedValues)) {
+            throw new YamlValueUnauthorized("The value {$value} is unauthorized for the key {$key}");
+        }
     }
 
     public function valid($value, $yamlFilePath)

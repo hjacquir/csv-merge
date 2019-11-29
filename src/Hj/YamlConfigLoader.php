@@ -14,6 +14,10 @@ class YamlConfigLoader
     const KEY_KEYHEADER = 'keyHeader';
     const KEY_MIGRATION_MAPPING = 'migrationMapping';
     const KEY_MAPPING_RELATION = 'mappingRelation';
+    const MAPPING_RELATION_AUTHORIZED_VALUES = [
+        'OneToOne',
+        'ManyToOne',
+    ];
 
     /**
      * @var string
