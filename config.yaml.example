@@ -9,4 +9,4 @@ migrationMapping:
     headerHost1: "headerReceiver1"
     headerHost2: "headerReceiver2"
 #two possibles values for mappingRelation : oneToOne or manyToOne
-mappingRelation: 'oneToOne'
+mappingRelation: 'OneToOne'
